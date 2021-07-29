@@ -1,29 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:movie/screens/welcome_screen.dart';
-import 'login_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-SharedPreferences? localStorage;
-String? _password;
+import 'login_screen.dart';
+
 String? email;
+String? password;
 
 class RegistrationScreen extends StatefulWidget {
-  static String id = 'registration_screen';
+  const RegistrationScreen({required this.prefs});
+  final SharedPreferences prefs;
 
   @override
   _RegistrationScreenState createState() => _RegistrationScreenState();
-
-  bool checkUser({required String password, required String mail}) {
-    return (password == _password && mail == email) ? true : false;
-  }
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   bool _passwordVisibility = false;
   String selectedOccupation = 'Engineer';
-
-  Future<SharedPreferences> prefs = SharedPreferences.getInstance();
 
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -76,9 +71,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       hintText: 'E-Mail ID',
                     ),
                     controller: emailController,
-                    onChanged: (value) {
-                      email = value;
-                    },
+                    // onChanged: (value) {
+                    //   email = value;
+                    // },
                   ),
                   SizedBox(
                     height: 30,
@@ -114,9 +109,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     obscureText: _passwordVisibility ? false : true,
                     textAlign: TextAlign.left,
                     controller: passwordController,
-                    onChanged: (value) {
-                      _password = value;
-                    },
+                    // onChanged: (value) {
+                    //   _password = value;
+                    // },
                   ),
                   SizedBox(
                     height: 30.0,
@@ -156,42 +151,45 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         elevation: 5.0,
                       ),
                       onPressed: () {
-                        _password = passwordController.text;
+                        password = passwordController.text;
                         email = emailController.text;
-                        // name = nameController.text;
-                        // mobile = mobileController.text;
 
                         try {
-                          if (_password == '' ||
-                              email == '' ||
+                          if (passwordController.text == '' ||
+                              emailController.text == '' ||
                               nameController.text == '' ||
                               mobileController.text == '') {
                             print('Wrong credentials');
                           } else {
-                            localStorage!
+                            widget.prefs
                                 .setString('email', emailController.text);
-                            localStorage!
+                            widget.prefs
                                 .setString('password', passwordController.text);
-                            localStorage!
-                                .setString('name', nameController.text);
-                            localStorage!
+                            widget.prefs.setString('name', nameController.text);
+                            widget.prefs
                                 .setString('mobile', mobileController.text);
-                            localStorage!
+                            widget.prefs
                                 .setString('occupation', selectedOccupation);
 
-                            Navigator.pushNamed(context, LoginScreen.id);
-
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) {
-                            //       return WelcomeScreen();
-                            //     },
-                            //   ),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) {
+                                  return WelcomeScreen(prefs: widget.prefs);
+                                },
+                              ),
+                            );
                           }
                         } catch (error) {
                           print(error);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return LoginScreen(prefs: widget.prefs);
+                              },
+                            ),
+                          );
                         }
                       }),
                   SizedBox(
@@ -201,7 +199,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Already have an account?',
+                        'Already logged into an account?',
                         textAlign: TextAlign.right,
                         style: TextStyle(
                           fontSize: 16,
@@ -210,7 +208,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.pushNamed(context, LoginScreen.id);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return LoginScreen(prefs: widget.prefs);
+                              },
+                            ),
+                          );
                         },
                         child: Text(
                           'Login',

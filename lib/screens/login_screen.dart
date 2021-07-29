@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
-
 import 'package:movie/screens/welcome_screen.dart';
-import 'registration_screen.dart';
-
-RegistrationScreen registrationScreen = RegistrationScreen();
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
-  static String id = 'login_screen';
+  //static String id = 'login_screen';
+  const LoginScreen({required this.prefs});
+  final SharedPreferences prefs;
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool showSpinner = false;
   bool _passwordVisibility = false;
   String? password;
   String? email;
@@ -69,7 +67,6 @@ class _LoginScreenState extends State<LoginScreen> {
               TextField(
                 decoration: InputDecoration(
                     prefixIcon: Icon(Icons.lock),
-                    //icon: Image.asset("assets/home.png", color: Colors.grey,),
                     hintText: 'Password',
                     suffixIcon: IconButton(
                       icon: Icon(
@@ -101,22 +98,27 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Text(
                     'Login',
                   ),
-                  onPressed: () async {
-                    bool condition = registrationScreen.checkUser(
-                        password: passwordController.text,
-                        mail: emailController.text);
-
-                    if (condition == true)
-                      try {
-                        // final user = await _auth.signInWithEmailAndPassword(
-                        //     email: email, password: password);
-                        if (true) {
-                          Navigator.pushNamed(context, WelcomeScreen.id);
-                        }
-                      } catch (e) {
-                        print(e);
+                  onPressed: () {
+                    try {
+                      if (emailController == widget.prefs.getString('email') &&
+                          passwordController ==
+                              widget.prefs.getString('password')) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return WelcomeScreen(prefs: widget.prefs);
+                            },
+                          ),
+                        );
+                      } else {
+                        print(
+                            'Sorry credentials don not match. Try logging in again.');
                       }
-                  }),
+                    } catch (e) {
+                      print(e);
+                    }
+                  })
             ],
           ),
         ),

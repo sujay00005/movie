@@ -21,7 +21,7 @@ class AboutScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text('Housy'),
+                  Text('Geeksynergy Technologies Pvt Ltd'),
                 ],
               ),
               Row(
@@ -32,7 +32,7 @@ class AboutScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text('Pune, India'),
+                  Text('Sanjaynagar, Bengaluru-56'),
                 ],
               ),
               Row(
@@ -55,7 +55,7 @@ class AboutScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    'XXXXXX@housy.com',
+                    'XXXXXX@gmail.com',
                     style: TextStyle(
                         color: Colors.purpleAccent,
                         decoration: TextDecoration.underline),
