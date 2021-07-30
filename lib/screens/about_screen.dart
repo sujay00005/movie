@@ -9,7 +9,7 @@ class AboutScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.green,
       body: Container(
-        margin: EdgeInsets.all(50),
+        margin: EdgeInsets.all(30),
         child: Center(
           child: Column(
             children: [

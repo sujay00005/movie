@@ -3,7 +3,6 @@ import 'package:movie/screens/welcome_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
-  //static String id = 'login_screen';
   const LoginScreen({required this.prefs});
   final SharedPreferences prefs;
 
@@ -100,9 +99,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   onPressed: () {
                     try {
-                      if (emailController == widget.prefs.getString('email') &&
-                          passwordController ==
-                              widget.prefs.getString('password')) {
+                      if (widget.prefs.getString('email') ==
+                              emailController.text &&
+                          widget.prefs.getString('password') ==
+                              passwordController.text) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -113,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                       } else {
                         print(
-                            'Sorry credentials don not match. Try logging in again.');
+                            'Sorry credentials do not match. Try logging in again.');
                       }
                     } catch (e) {
                       print(e);
